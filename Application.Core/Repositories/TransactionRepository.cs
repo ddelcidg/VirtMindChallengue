@@ -42,7 +42,23 @@ namespace Application.Core.Repositories
             _context.Transactions.Add(transaction);
             _context.SaveChanges();
         }
+        public IEnumerable<Transaction> GetTransactionsByUserId(string userId)
+        {
+            try
+            {
+                // Query the database to retrieve transactions for the specified user
+                var transactions = _context.Transactions
+                    .Where(t => t.UserId == userId)
+                    .ToList();
 
-        // You can add more transaction-related database interactions as needed
+                return transactions;
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                // Implement proper error handling/logging here
+                throw; // Rethrow the exception or handle it as needed
+            }
+        }
     }
 }

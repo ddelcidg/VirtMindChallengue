@@ -17,16 +17,14 @@ public class CurrencyExchangeService
 
     public ValidationResult ValidatePurchaseRequest(CurrencyPurchaseRequest request)
     {
-        // Validate user existence (you can extend this validation as needed)
-        var user = _userRepository.GetUserById(request.UserId);
-        if (user == null)
-        {
-            return new ValidationResult(false, "User not found.");
-        }
-
         // Validate monthly limit
         var monthlyLimit = GetMonthlyLimit(request.CurrencyCode);
         var totalPurchasesThisMonth = _transactionRepository.GetTotalPurchasesThisMonth(request.UserId, request.CurrencyCode);
+
+        if (totalPurchasesThisMonth == 0)
+        {
+            return new ValidationResult(false, "Verify that you have entered the information correctly.");
+        }
 
         if (totalPurchasesThisMonth + request.Amount > monthlyLimit)
         {
@@ -56,6 +54,23 @@ public class CurrencyExchangeService
         return resultingValue;
     }
 
+    public IEnumerable<Transaction> GetTransactionsByUserId(string userId)
+    {
+        try
+        {
+            // Call the repository to retrieve transactions for the specified user
+            var transactions = _transactionRepository.GetTransactionsByUserId(userId);
+
+            return transactions;
+        }
+        catch (Exception ex)
+        {
+            // Log the error
+            // Implement proper error handling/logging here
+            throw; // Rethrow the exception or handle it as needed
+        }
+    }
+
     private decimal GetMonthlyLimit(string currencyCode)
     {
         // Implementa lógica para obtener el límite mensual basado en el código de moneda
@@ -73,17 +88,17 @@ public class CurrencyExchangeService
 
     private decimal GetExchangeRate(string currencyCode)
     {
-        // Implementa lógica para obtener la tasa de cambio basada en el código de moneda
-        // Esto podría implicar hacer una llamada a una API externa o consultar una base de datos
-        // Por ejemplo, puedes simular una tasa de cambio fija para fines de demostración:
+        // Implement logic to get the exchange rate based on the currency code
+        // This could involve making an external API call or querying a database
+        // For example, you can simulate a fixed exchange rate for demo purposes:
         switch (currencyCode)
         {
             case "USD":
-                return 1.0m; // Tasa de cambio fija para USD (1 USD = 1 USD)
+                return 1.0m; // Fixed exchange rate for USD (1 USD = 1 USD)
             case "BRL":
-                return 5.0m; // Tasa de cambio fija para BRL (1 USD = 5 BRL)
+                return 5.0m; // Fixed exchange rate for BRL (1 USD = 5 BRL)
             default:
-                return 0.0m; // Código de moneda no válido
+                return 0.0m; // Invalid currency code
         }
     }
 }

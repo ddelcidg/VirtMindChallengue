@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Host.Controllers
 {
-    [Route("api/[controller]")]
+   // [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class CurrencyExchangeController : ControllerBase
     {
@@ -14,7 +15,8 @@ namespace Application.Host.Controllers
             _currencyExchangeService = currencyExchangeService;
         }
 
-        [HttpPost("purchase")]
+        //[HttpPost("purchase")]
+        [HttpPost(Name = "purchase")]
         public IActionResult PurchaseCurrency([FromBody] CurrencyPurchaseRequest request)
         {
             try
@@ -40,6 +42,26 @@ namespace Application.Host.Controllers
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
+        [HttpGet("transactions")]
+        public IActionResult GetTransactions([FromQuery] string userId)
+        {
+            try
+            {
+                // Query transactions based on the user ID using the service layer
+                var transactions = _currencyExchangeService.GetTransactionsByUserId(userId);
+
+                // Return the transactions
+                return Ok(transactions);
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                // Implement proper error handling/logging here
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
+
     }
 
     public class CurrencyPurchaseRequest

@@ -28,17 +28,13 @@ namespace Application.Host.Controllers
             var exchangeModel =new ExchangeModel();
             if (values.Any())
             {
-                /*if (currency.Equals("BRL", StringComparison.OrdinalIgnoreCase))
-                {
-                    values[0] = Convert.ToString(Convert.ToDouble(values[0]) / 4);
-                    values[1] = Convert.ToString(Convert.ToDouble(values[0]) / 4);
-                }*/
+
                 exchangeModel.Currency = currency;
-                exchangeModel.Date = DateTime.UtcNow; // Asigna la fecha actual (puedes obtenerla de la API externa si está disponible)
+                exchangeModel.Date = DateTime.UtcNow; // Assign the current date (you can get it from the external API if it's available)
 
                 if (currency.Equals("BRL", StringComparison.OrdinalIgnoreCase))
                 {
-                    // Realiza la conversión si es necesario
+                    // Perform the conversion if necessary
                     exchangeModel.ExchangeRatePurchase = Convert.ToDecimal(values[0]) / 4;
                     exchangeModel.ExchangeRateSale = Convert.ToDecimal(values[1]) / 4;
 
@@ -57,7 +53,7 @@ namespace Application.Host.Controllers
         }
 
         //CrossCoree
-        //errores en una constantes
+        // errors in constants
         private void ValidateCurrency(string currency)
         {
             if (string.IsNullOrEmpty(currency))
@@ -67,20 +63,6 @@ namespace Application.Host.Controllers
                 throw new ApplicationException($"{currency} currenty type is invalid. should be USD or BRL");
         }
 
-        //Domain
-       /* private static async Task<string[]> GetValues()
-        {
-            string[] response = null;
-            HttpClient client = new HttpClient();
-            HttpResponseMessage httpResponseMessage = await client.GetAsync("https://www.bancoprovincia.com.ar/Principal/dolar");
-            if (httpResponseMessage.IsSuccessStatusCode)
-            {                
-                var content = await httpResponseMessage.Content.ReadAsStringAsync();
-                if (content != null)
-                    response = System.Text.Json.JsonSerializer.Deserialize<string[]>(content);        
-            }
-            return response;
-        }*/
     }
 }
 
