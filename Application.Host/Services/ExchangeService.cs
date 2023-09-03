@@ -1,12 +1,21 @@
 ﻿namespace Application.Host.Services
 {
-    public class ExchangeService
+    public interface IExchangeService
+    {
+        Task<string[]> GetValuesFromExternalAPI();
+    }
+    public class ExchangeService : IExchangeService
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
         public ExchangeService(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+        }
+        // Parameterless constructor for testing
+        public ExchangeService()
+        {
+            // Create a default instance with no dependencies for testing
         }
 
         private static async Task<string[]> GetValues()

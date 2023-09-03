@@ -17,7 +17,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 
 // Registra ExchangeService como un servicio
-builder.Services.AddScoped<ExchangeService>();
+//builder.Services.AddScoped<ExchangeService>();
+builder.Services.AddScoped<IExchangeService, ExchangeService>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<TransactionRepository>();
 builder.Services.AddScoped<CurrencyExchangeService>();

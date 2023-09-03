@@ -11,13 +11,22 @@ namespace Application.Host.Controllers
     [Route("[controller]")]
     public class ExchangeController : Controller
     {
-        private readonly ILogger<ExchangeController> _logger;
+        /*private readonly ILogger<ExchangeController> _logger;
         private readonly ExchangeService _exchangeService;
         //1- Domain, CrossCore
         public ExchangeController(ILogger<ExchangeController> logger, ExchangeService exchangeService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _exchangeService = exchangeService ?? throw new ArgumentNullException(nameof(exchangeService));
+        }*/
+
+        private readonly ILogger<ExchangeController> _logger;
+        private readonly IExchangeService _exchangeService;
+
+        public ExchangeController(ILogger<ExchangeController> logger, IExchangeService exchangeService)
+        {
+            _logger = logger;
+            _exchangeService = exchangeService;
         }
         [HttpPost(Name = "get-by-currenry")]
         public async Task<IActionResult> GetByCurrency(string currency)
@@ -54,13 +63,13 @@ namespace Application.Host.Controllers
 
         //CrossCoree
         // errors in constants
-        private void ValidateCurrency(string currency)
+        public void ValidateCurrency(string currency)
         {
             if (string.IsNullOrEmpty(currency))
                 throw new ApplicationException("currenty type is empty. should be USD or BRL");
             if (!currency.Equals("USD", StringComparison.OrdinalIgnoreCase) &&
                 !currency.Equals("BRL", StringComparison.OrdinalIgnoreCase))
-                throw new ApplicationException($"{currency} currenty type is invalid. should be USD or BRL");
+                throw new ApplicationException($"{currency} currency type is invalid. should be USD or BRL");
         }
 
     }
