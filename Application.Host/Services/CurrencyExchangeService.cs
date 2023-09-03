@@ -21,7 +21,7 @@ public class CurrencyExchangeService
         var monthlyLimit = GetMonthlyLimit(request.CurrencyCode);
         var totalPurchasesThisMonth = _transactionRepository.GetTotalPurchasesThisMonth(request.UserId, request.CurrencyCode);
 
-        if (totalPurchasesThisMonth == 0)
+       if (monthlyLimit == 0)
         {
             return new ValidationResult(false, "Verify that you have entered the information correctly.");
         }
@@ -73,8 +73,8 @@ public class CurrencyExchangeService
 
     private decimal GetMonthlyLimit(string currencyCode)
     {
-        // Implementa lógica para obtener el límite mensual basado en el código de moneda
-        // Por ejemplo, establecer límites para "USD" y "BRL"
+        // Implement logic to get the monthly limit based on the currency code
+        // For example, set limits for "USD" and "BRL"
         switch (currencyCode)
         {
             case "USD":
